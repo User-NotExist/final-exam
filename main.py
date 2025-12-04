@@ -11,8 +11,9 @@ class DeliveryOrder:
     def summary(self):
         print("Order Summary:")
         print(f"Item: {self.item}")
+        print(f"Customer: {self.customer.name}")
         print(f"Status: {self.status}")
-        print(f"Driver: {self.__driver}")
+        print(f"Driver: {self.__driver.name}")
 
 
 class Person:
@@ -42,3 +43,32 @@ class Driver(Person):
         order.status = "delivered"
 
 
+c1 = Customer("Alice", "192.168.0.2")
+c2 = Customer("Bob", "192.168.0.3")
+d1 = Driver("David", "motorcycle")
+
+c1.introduce()
+c2.introduce()
+d1.introduce()
+
+print()
+
+o1 = c1.place_order("Laptop")
+o2 = c2.place_order("Headphones")
+
+o1.assign_driver(d1)
+o2.assign_driver(d1)
+
+o1.summary()
+print()
+o2.summary()
+print()
+
+d1.deliver(o1)
+d1.deliver(o2)
+
+print()
+
+print("Final Status:")
+print(f"Order for {o1.item}: → {o1.status}")
+print(f"Order for {o2.item}: → {o2.status}")
