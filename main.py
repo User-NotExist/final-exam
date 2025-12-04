@@ -3,17 +3,17 @@ class DeliveryOrder:
         self.customer = customer
         self.item = item
         self.status = "preparing"
-        self.__driver = None
+        self.driver = None
 
     def assign_driver(self, driver):
-        self.__driver = driver
+        self.driver = driver
     
     def summary(self):
         print("Order Summary:")
         print(f"Item: {self.item}")
         print(f"Customer: {self.customer.name}")
         print(f"Status: {self.status}")
-        print(f"Driver: {self.__driver.name}")
+        print(f"Driver: {self.driver.name}")
 
 
 class Person:
@@ -42,6 +42,46 @@ class Driver(Person):
         print(f"{self.name} is delivering {order.item} to {order.customer.name} using {self.vehicle}.")
         order.status = "delivered"
 
+class PostOffice:
+    def __init__(self, name, address):
+        self.name = name
+        self.address = address
+        self.drivers = []
+        self.orders = []
+    
+    def add_driver(self, driver):
+        self.drivers.append(driver)
+    
+    def add_order(self, order):
+        self.orders.append(order)
+    
+    def assign_order(self, order):
+        order.assign_driver(self.__get_driver_lowest())
+
+    
+    def __get_driver_lowest(self):
+        dic = {}
+        for i in self.drivers:
+            dic[i] = 0
+        
+        for j in self.orders:
+            if j.status == "delivered" or j.driver == None:
+                continue
+            dic[j.driver] += 1
+        
+        hk, hv = None, None
+        for k,v in dic.items():
+            if hk == None:
+                hk = k
+                hv = v
+                continue
+
+            if v < hv:
+                hk = k
+                hv = v
+        return hk
+    
+post = PostOffice("the wall", "192.168.0.1")
 
 c1 = Customer("Alice", "192.168.0.2")
 c2 = Customer("Bob", "192.168.0.3")
@@ -53,11 +93,14 @@ d1.introduce()
 
 print()
 
+post.add_driver(d1)
+
+
 o1 = c1.place_order("Laptop")
 o2 = c2.place_order("Headphones")
 
-o1.assign_driver(d1)
-o2.assign_driver(d1)
+post.assign_order(o1)
+post.assign_order(o2)
 
 o1.summary()
 print()
