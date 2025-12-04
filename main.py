@@ -3,6 +3,17 @@ class DeliveryOrder:
         self.customer = customer
         self.item = item
         self.status = "preparing"
+        self.__driver = None
+
+    def assign_driver(self, driver):
+        self.__driver = driver
+    
+    def summary(self):
+        print("Order Summary:")
+        print(f"Item: {self.item}")
+        print(f"Status: {self.status}")
+        print(f"Driver: {self.__driver}")
+
 
 class Person:
     def __init__(self, name):
@@ -26,5 +37,8 @@ class Driver(Person):
         super().__init__(name)
         self.vehicle = vehicle
     
-    def deliver(self, order)
+    def deliver(self, order):
         print(f"{self.name} is delivering {order.item} to {order.customer.name} using {self.vehicle}.")
+        order.status = "delivered"
+
+
